@@ -145,6 +145,40 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/name" />
 
+                        <TextView
+                            android:id="@+id/note"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Persönliche Notiz"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/category" />
+
+                        <EditText
+                            android:id="@+id/noteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:gravity="start|top"
+                            android:inputType="textMultiLine"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/note" />
+
+                        <Button
+                            android:id="@+id/editNote"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Notiz bearbeiten"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/noteText" />
+
                         <View
                             android:id="@+id/separator3"
                             android:layout_width="match_parent"
@@ -153,7 +187,7 @@
                             android:layout_marginTop="16dp"
                             android:background="#ffeeeeee"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/category" />
+                            app:layout_constraintTop_toBottomOf="@+id/editNote" />
 
                         <RatingBar
                             android:id="@+id/addRatingBar"
@@ -229,9 +263,9 @@
                                 android:layout_weight="1"
                                 android:drawableTop="@drawable/ic_bookmark_brown_24dp"
                                 android:drawableTint="@android:color/darker_gray"
+                                android:textColor="@android:color/darker_gray"
                                 android:textOff="Wunschliste"
                                 android:textOn="Wunschliste"
-                                android:textColor="@android:color/darker_gray"
                                 android:textSize="10sp" />
 
                             <View

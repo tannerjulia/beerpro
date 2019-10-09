@@ -73,6 +73,7 @@ public class ProfileFragment extends Fragment {
         model.getMyWishlist().observe(this, this::updateWishlistCount);
         model.getMyRatings().observe(this, this::updateRatingsCount);
         model.getMyBeers().observe(this, this::updateMyBeersCount);
+        //model.getMyBeers(getContext()).observe(this, this::updateMyBeersCount);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 

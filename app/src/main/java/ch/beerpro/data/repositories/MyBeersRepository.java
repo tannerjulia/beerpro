@@ -1,5 +1,7 @@
 package ch.beerpro.data.repositories;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -47,13 +49,18 @@ public class MyBeersRepository {
                 beersAlreadyOnTheList.add(beerId);
             }
         }
+
+        for(String beerId : beers.keySet()) {
+            //content.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        }
+
         Collections.sort(result, (r1, r2) -> r2.getDate().compareTo(r1.getDate()));
         return result;
     }
 
 
     public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
-                                             LiveData<List<Rating>> myRatings) {
+                                             LiveData<List<Rating>> myRatings, Context context) {
         return map(combineLatest(myWishlist, myRatings, map(allBeers, Entity::entitiesById)),
                 MyBeersRepository::getMyBeers);
     }
