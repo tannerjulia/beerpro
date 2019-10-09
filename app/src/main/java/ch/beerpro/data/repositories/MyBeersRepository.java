@@ -60,7 +60,7 @@ public class MyBeersRepository {
 
 
     public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
-                                             LiveData<List<Rating>> myRatings, Context context) {
+                                             LiveData<List<Rating>> myRatings) {
         return map(combineLatest(myWishlist, myRatings, map(allBeers, Entity::entitiesById)),
                 MyBeersRepository::getMyBeers);
     }
