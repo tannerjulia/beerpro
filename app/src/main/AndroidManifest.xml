@@ -33,6 +33,14 @@
             android:label="@string/title_activity_single_beer"
             android:parentActivityName=".presentation.explore.search.SearchActivity"
             android:theme="@style/DetailsPageTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="www.beerpro.ch"
+                    android:pathPrefix="/beer" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.explore.search.SearchActivity" />

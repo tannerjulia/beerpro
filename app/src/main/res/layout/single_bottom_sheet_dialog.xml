@@ -12,6 +12,35 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/addRating"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_star_black_24dp"
+            android:drawableTint="@android:color/darker_gray"
+            android:text="Rating Hinzufügen"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="10sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ffeeeeee" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ffeeeeee" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
             android:id="@+id/addPlace"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
