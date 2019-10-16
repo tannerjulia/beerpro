@@ -14,10 +14,12 @@ import ch.beerpro.data.repositories.BeersRepository;
 import ch.beerpro.data.repositories.CurrentUser;
 import ch.beerpro.data.repositories.LikesRepository;
 import ch.beerpro.data.repositories.MyBeersRepository;
+import ch.beerpro.data.repositories.PriceRepository;
 import ch.beerpro.data.repositories.RatingsRepository;
 import ch.beerpro.data.repositories.WishlistRepository;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.Price;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
 
@@ -45,6 +47,7 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         likesRepository = new LikesRepository();
         wishlistRepository = new WishlistRepository();
         ratingsRepository = new RatingsRepository();
+        PriceRepository priceRepository = new PriceRepository();
         MyBeersRepository myBeersRepository = new MyBeersRepository();
 
         LiveData<List<Beer>> allBeers = beersRepository.getAllBeers();
@@ -52,7 +55,8 @@ public class MainViewModel extends ViewModel implements CurrentUser {
         MutableLiveData<String> currentUserId = new MutableLiveData<>();
         myWishlist = wishlistRepository.getMyWishlist(currentUserId);
         myRatings = ratingsRepository.getMyRatings(currentUserId);
-        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings);
+        LiveData<List<Price>> myPrices = priceRepository.getMyPrices(currentUserId);
+        myBeers = myBeersRepository.getMyBeers(allBeers, myWishlist, myRatings, myPrices);
 
         /*
          * Set the current user id, which is used as input for the getMyWishlist and getMyRatings calls above.

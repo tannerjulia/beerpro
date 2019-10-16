@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -44,7 +47,8 @@ import static ch.beerpro.presentation.utils.DrawableHelpers.setDrawableTint;
 
 public class DetailsActivity extends AppCompatActivity implements OnRatingLikedListener {
 
-    public static final String PREFS_NAME = "NotePreference";
+    public static final String NOTE_PREFERENCE = "NotePreference";
+    public static final String PRICE_PREFERENCE = "PricePreference";
     public static final String ITEM_ID = "item_id";
     private static final String TAG = "DetailsActivity";
     @BindView(R.id.toolbar)
@@ -83,11 +87,17 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     @BindView(R.id.note)
     TextView note;
 
+    @BindView(R.id.noteView)
+    CardView noteView;
+
     @BindView(R.id.noteText)
     EditText noteText;
 
     @BindView(R.id.editNote)
     Button editNote;
+
+    @BindView(R.id.avgPrice)
+    TextView avgPrice;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -127,7 +137,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         recyclerView.setAdapter(adapter);
         addRatingBar.setOnRatingBarChangeListener(this::addNewRating);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences(NOTE_PREFERENCE, MODE_PRIVATE);
         editNote.setOnClickListener(getNoteListener());
         changeVisibilityOfNoteField(settings);
         updateNote(settings);
@@ -150,6 +160,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
 
         View addPrivateNote = view.findViewById(R.id.addPrivateNote);
         addPrivateNote.setOnClickListener(getNoteListener());
+
+        View addPrice = view.findViewById(R.id.addPrice);
+        addPrice.setOnClickListener(getPriceListener());
     }
 
     private View.OnClickListener getNoteListener() {
@@ -159,14 +172,18 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
     private void showNoteDialog(Context context) {
-        SharedPreferences settings= getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences(NOTE_PREFERENCE, MODE_PRIVATE);
         EditText noteText = new EditText(context);
+        noteText.setHint("Notiz");
         noteText.setText(settings.getString(beerId, ""));
         new AlertDialog.Builder(context)
                 .setTitle("Persönliche Notiz")
                 .setView(noteText)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    saveNote(noteText, settings);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(beerId, noteText.getText().toString());
+                    editor.commit();
+
                     changeVisibilityOfNoteField(settings);
                     updateNote(settings);
                 })
@@ -174,27 +191,36 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
                 .show();
     }
 
-    private void saveNote(EditText noteText, SharedPreferences settings) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(beerId, noteText.getText().toString());
-        editor.commit();
-    }
-
     private void changeVisibilityOfNoteField(SharedPreferences settings) {
         if (settings.contains(beerId)) {
-            note.setVisibility(TextView.VISIBLE);
-            noteText.setVisibility(EditText.VISIBLE);
-            editNote.setVisibility(Button.VISIBLE);
+            noteView.setVisibility(CardView.VISIBLE);
         } else {
-            note.setVisibility(TextView.GONE);
-            noteText.setVisibility(EditText.GONE);
-            editNote.setVisibility(Button.GONE);
+            noteView.setVisibility(CardView.GONE);
         }
     }
 
     private void updateNote(SharedPreferences settings) {
         String note = settings.getString(beerId, "");
         noteText.setText(note);
+    }
+
+    private View.OnClickListener getPriceListener() {
+        return view -> showPriceDialog(view.getContext());
+    }
+
+    private void showPriceDialog(Context context) {
+        EditText price = new EditText(context);
+        price.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        price.setHint("Preis");
+        price.setFilters(new InputFilter[]{new PriceInputFilter()});
+        new AlertDialog.Builder(context)
+                .setTitle("Preis hinzufügen")
+                .setView(price)
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    model.savePrice(beerId, Float.parseFloat(price.getText().toString()));
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     private void updateBeer(Beer item) {
@@ -208,6 +234,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         ratingBar.setRating(item.getAvgRating());
         avgRating.setText(getResources().getString(R.string.fmt_avg_rating, item.getAvgRating()));
         numRatings.setText(getResources().getString(R.string.fmt_ratings, item.getNumRatings()));
+        avgPrice.setText(String.valueOf(item.getAvgPrice()));
         toolbar.setTitle(item.getName());
     }
 

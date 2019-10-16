@@ -1,10 +1,6 @@
 package ch.beerpro.data.repositories;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
-
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,20 +12,24 @@ import java.util.Set;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Entity;
 import ch.beerpro.domain.models.MyBeer;
+import ch.beerpro.domain.models.MyBeerFromPrice;
 import ch.beerpro.domain.models.MyBeerFromRating;
 import ch.beerpro.domain.models.MyBeerFromWishlist;
+import ch.beerpro.domain.models.Price;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
+import ch.beerpro.domain.utils.Quadrupel;
 
 import static androidx.lifecycle.Transformations.map;
 import static ch.beerpro.domain.utils.LiveDataExtensions.combineLatest;
 
 public class MyBeersRepository {
 
-    private static List<MyBeer> getMyBeers(Triple<List<Wish>, List<Rating>, HashMap<String, Beer>> input) {
-        List<Wish> wishlist = input.getLeft();
-        List<Rating> ratings = input.getMiddle();
-        HashMap<String, Beer> beers = input.getRight();
+    private static List<MyBeer> getMyBeers(Quadrupel<List<Wish>, List<Rating>, List<Price>, HashMap<String, Beer>> input) {
+        List<Wish> wishlist = input.getLastA();
+        List<Rating> ratings = input.getLastB();
+        List<Price> prices = input.getLastC();
+        HashMap<String, Beer> beers = input.getLastD();
 
         ArrayList<MyBeer> result = new ArrayList<>();
         Set<String> beersAlreadyOnTheList = new HashSet<>();
@@ -50,18 +50,21 @@ public class MyBeersRepository {
             }
         }
 
-        for(String beerId : beers.keySet()) {
-            //content.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        for (Price price : prices) {
+            String beerId = price.getBeerId();
+            if (!beersAlreadyOnTheList.contains(beerId)) {
+                result.add(new MyBeerFromPrice(price, beers.get(beerId)));
+                beersAlreadyOnTheList.add(beerId);
+            }
         }
 
         Collections.sort(result, (r1, r2) -> r2.getDate().compareTo(r1.getDate()));
         return result;
     }
 
-
     public LiveData<List<MyBeer>> getMyBeers(LiveData<List<Beer>> allBeers, LiveData<List<Wish>> myWishlist,
-                                             LiveData<List<Rating>> myRatings) {
-        return map(combineLatest(myWishlist, myRatings, map(allBeers, Entity::entitiesById)),
+                                             LiveData<List<Rating>> myRatings, LiveData<List<Price>> myPrices) {
+        return map(combineLatest(myWishlist, myRatings, myPrices, map(allBeers, Entity::entitiesById)),
                 MyBeersRepository::getMyBeers);
     }
 
