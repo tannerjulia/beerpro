@@ -187,7 +187,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:isIndicator="false"
+                            android:isIndicator="true"
                             android:numStars="5"
                             android:rating="0"
                             android:stepSize="0.5"
@@ -203,7 +203,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="8dp"
-                            android:text="Neue Bewertung durch klicken und ziehen hinzufügen"
+                            android:text="Meine Durchschnittliche Bewertung"
                             android:textSize="10sp"
                             android:textStyle="italic"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -265,7 +265,7 @@
                                 android:background="#ffeeeeee" />
 
                             <Button
-                                android:id="@+id/button2"
+                                android:id="@+id/shareButton"
                                 style="?android:attr/borderlessButtonStyle"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
