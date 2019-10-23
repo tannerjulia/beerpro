@@ -182,11 +182,7 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
     }
 
     private void setPersonalAvgRating(float rating) {
-        if (rating == -1) {
-            addRatingBar.setRating(0);
-        } else {
-            addRatingBar.setRating(rating);
-        }
+        addRatingBar.setRating(rating);
     }
 
     private void addNewRating(RatingBar ratingBar, float v, boolean b) {

@@ -105,4 +105,5 @@
     <string name="action_search">Bier suchen</string>
     <string name="not_found_error_text">404 - Beer not found!</string>
     <string name="btn_return_home">Return Home</string>
+    <string name="title_activity_error">Error</string>
 </resources>

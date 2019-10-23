@@ -84,6 +84,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity_error"
+            android:label="@string/title_activity_error"
+            android:parentActivityName=".presentation.details.DetailsActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.details.DetailsActivity" />
+        </activity>
+
     </application>
 
 </manifest>
