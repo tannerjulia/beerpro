@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.RequiresApi;
@@ -44,6 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ch.beerpro.GlideApp;
 import ch.beerpro.R;
+import ch.beerpro.activity_error;
 import ch.beerpro.domain.models.Beer;
 import ch.beerpro.domain.models.Rating;
 import ch.beerpro.domain.models.Wish;
@@ -135,7 +137,9 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
             if (Pattern.compile("https://www.beerpro.ch/beer/[a-zA-Z0-9]*$").matcher(uri).matches()) {
                 beerId = uri.replaceAll("https://www.beerpro.ch/beer/", "");
             } else {
-                // TODO: handle error and display 404 beer not found activity?
+                Intent error_intent = new Intent(this, activity_error.class);
+                startActivity(error_intent);
+                return;
             }
         } else {
             beerId = getIntent().getExtras().getString(ITEM_ID, "");
@@ -203,9 +207,8 @@ public class DetailsActivity extends AppCompatActivity implements OnRatingLikedL
         try {
             startActivity(Intent.createChooser(intent, "Select an action"));
         } catch (android.content.ActivityNotFoundException ex) {
-            // TODO: (handle error)
+            Toast.makeText(this, "This is my Toast message!", Toast.LENGTH_SHORT).show();
         }
-
 
     }
 

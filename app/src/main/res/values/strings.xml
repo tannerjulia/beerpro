@@ -103,4 +103,6 @@
     <string name="title_activity_myratings">Meine Bewertungen</string>
     <string name="title_activity_mybeers">Meine Biere</string>
     <string name="action_search">Bier suchen</string>
+    <string name="not_found_error_text">404 - Beer not found!</string>
+    <string name="btn_return_home">Return Home</string>
 </resources>
